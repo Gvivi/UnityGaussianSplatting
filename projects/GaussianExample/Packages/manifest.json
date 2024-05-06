@@ -1,7 +1,9 @@
 {
   "dependencies": {
-    "org.nesnausk.gaussian-splatting": "file:../../../package",
     "com.unity.ide.rider": "3.0.24",
+    "com.unity.inputsystem": "1.6.3",
+    "com.unity.recorder": "4.0.2",
+    "org.nesnausk.gaussian-splatting": "file:../../../package",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -32,6 +34,12 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
-  }
+    "com.unity.modules.xr": "1.0.0",
+    "jp.keijiro.minis": "1.0.10"
+  },
+  "scopedRegistries": [{
+    "name": "Keijiro",
+    "url": "https://registry.npmjs.com",
+    "scopes": [ "jp.keijiro" ]
+  }]
 }
