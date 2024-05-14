@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance {
         get {
             if (_instance == null) {
-                Debug.LogError("GameManager is NULL.");
+                Debug.LogError("GameManager is NULL."); 
             }
             return _instance;
         }
@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
     public int Timestamp { get; private set; }
     public int ZoomLevel { get; private set; }
 
-    [SerializeField] private InputReader _inputReader;
     private int _numModels;
     private int _currentModelIndex = 0; 
     
@@ -52,13 +51,11 @@ public class GameManager : MonoBehaviour
     }
 
     private void OnEnable() {
-        //_inputReader.TimeSliderEvent += HandleTimeSlider;
-        _inputReader.DevShiftIndexEvent += HandleDevShiftIndex;
+        InputManager.Instance.DevShiftIndexEvent += HandleDevShiftIndex;
     }
 
     private void OnDisable() {
-        //_inputReader.TimeSliderEvent -= HandleTimeSlider;
-        _inputReader.DevShiftIndexEvent -= HandleDevShiftIndex;
+        InputManager.Instance.DevShiftIndexEvent -= HandleDevShiftIndex;
     }
 
     // adjusts the CurrentModelObject by index for development purposes

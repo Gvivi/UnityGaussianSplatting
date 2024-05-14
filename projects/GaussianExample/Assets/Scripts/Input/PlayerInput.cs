@@ -31,7 +31,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""DevShiftIndex"",
                     ""type"": ""Value"",
                     ""id"": ""3b6d9ca9-e407-4028-91f8-3cf426f42ad6"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -39,9 +39,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""1D Axis"",
                     ""id"": ""33bf5d4d-1228-43cc-973f-6b3eccc11e2e"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -50,31 +50,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""up"",
-                    ""id"": ""9ffd7931-ce17-48ea-8243-ba61280244c2"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""DevShiftIndex"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""4d7f6c8e-7a40-4e3e-b488-c33ea95aa125"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""DevShiftIndex"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
+                    ""name"": ""Negative"",
                     ""id"": ""6e0b893c-52d2-45b9-b223-467f4d140cfd"",
-                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""path"": ""<Keyboard>/u"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -83,9 +61,77 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""right"",
+                    ""name"": ""Positive"",
                     ""id"": ""3d572385-d6ff-4a69-a12b-a76fc58d021d"",
-                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DevShiftIndex"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
+            ""name"": ""Simulation"",
+            ""id"": ""02d1c625-df1f-4d6e-b1db-bdf37b712ee6"",
+            ""actions"": [
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""3fe20e3c-4004-49d6-913c-8b76ae67d758"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""7739e60c-d377-40b3-a6eb-3ef8ba7abeb3"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DevShiftIndex"",
+                    ""type"": ""Value"",
+                    ""id"": ""0ad64683-8c17-4fa4-8ecf-18e86ab58824"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""84c63896-6f37-4efd-9a96-d720267bd584"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DevShiftIndex"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""e0c92ef3-a836-45be-9750-e45ed548889d"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DevShiftIndex"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""299b21ad-fb2a-40c5-9787-e6a65314be2f"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -95,58 +141,69 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""2D Vector"",
-                    ""id"": ""36ab207b-b7a3-46b4-a2a9-62b1af8f239d"",
+                    ""id"": ""76813a05-ea21-466b-9fff-7f09cd3b5a95"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DevShiftIndex"",
+                    ""action"": ""Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""up"",
-                    ""id"": ""24966e7c-7bcb-4f81-acaa-7eb5f35d9aab"",
+                    ""id"": ""37a6bda7-0036-440e-8656-9d4a3bc99167"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DevShiftIndex"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""down"",
-                    ""id"": ""dacf1a94-c492-47fd-a3e0-c7151071f7d5"",
+                    ""id"": ""263e690d-802a-4742-b93f-945930fbe809"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DevShiftIndex"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""left"",
-                    ""id"": ""dab7b820-2014-4165-b537-7f58772fe378"",
+                    ""id"": ""cb48c464-17f9-49d6-8f36-042983f3aa42"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DevShiftIndex"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""right"",
-                    ""id"": ""49236601-5b12-49ab-a2c8-5bd779ba5ff0"",
+                    ""id"": ""1c3361bb-b3d4-4524-9e53-06b43f2f1bfe"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DevShiftIndex"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93426f48-9ba5-4e94-909e-4568eb4407ad"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -156,6 +213,11 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         // Installation
         m_Installation = asset.FindActionMap("Installation", throwIfNotFound: true);
         m_Installation_DevShiftIndex = m_Installation.FindAction("DevShiftIndex", throwIfNotFound: true);
+        // Simulation
+        m_Simulation = asset.FindActionMap("Simulation", throwIfNotFound: true);
+        m_Simulation_Look = m_Simulation.FindAction("Look", throwIfNotFound: true);
+        m_Simulation_Move = m_Simulation.FindAction("Move", throwIfNotFound: true);
+        m_Simulation_DevShiftIndex = m_Simulation.FindAction("DevShiftIndex", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -259,8 +321,76 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         }
     }
     public InstallationActions @Installation => new InstallationActions(this);
+
+    // Simulation
+    private readonly InputActionMap m_Simulation;
+    private List<ISimulationActions> m_SimulationActionsCallbackInterfaces = new List<ISimulationActions>();
+    private readonly InputAction m_Simulation_Look;
+    private readonly InputAction m_Simulation_Move;
+    private readonly InputAction m_Simulation_DevShiftIndex;
+    public struct SimulationActions
+    {
+        private @PlayerInput m_Wrapper;
+        public SimulationActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Look => m_Wrapper.m_Simulation_Look;
+        public InputAction @Move => m_Wrapper.m_Simulation_Move;
+        public InputAction @DevShiftIndex => m_Wrapper.m_Simulation_DevShiftIndex;
+        public InputActionMap Get() { return m_Wrapper.m_Simulation; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(SimulationActions set) { return set.Get(); }
+        public void AddCallbacks(ISimulationActions instance)
+        {
+            if (instance == null || m_Wrapper.m_SimulationActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SimulationActionsCallbackInterfaces.Add(instance);
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @DevShiftIndex.started += instance.OnDevShiftIndex;
+            @DevShiftIndex.performed += instance.OnDevShiftIndex;
+            @DevShiftIndex.canceled += instance.OnDevShiftIndex;
+        }
+
+        private void UnregisterCallbacks(ISimulationActions instance)
+        {
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @DevShiftIndex.started -= instance.OnDevShiftIndex;
+            @DevShiftIndex.performed -= instance.OnDevShiftIndex;
+            @DevShiftIndex.canceled -= instance.OnDevShiftIndex;
+        }
+
+        public void RemoveCallbacks(ISimulationActions instance)
+        {
+            if (m_Wrapper.m_SimulationActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ISimulationActions instance)
+        {
+            foreach (var item in m_Wrapper.m_SimulationActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_SimulationActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public SimulationActions @Simulation => new SimulationActions(this);
     public interface IInstallationActions
     {
+        void OnDevShiftIndex(InputAction.CallbackContext context);
+    }
+    public interface ISimulationActions
+    {
+        void OnLook(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
         void OnDevShiftIndex(InputAction.CallbackContext context);
     }
 }

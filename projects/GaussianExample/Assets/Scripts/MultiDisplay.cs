@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class MultiDisplay : MonoBehaviour
 {
-    [SerializeField] private int _nCameras = 3;
+    private enum DisplayMode { MultiDisplay, SplitScreen, Projection };
+    private GameObject[] _cameras;
+    private int _nCameras = 3;
+
     [SerializeField] private GameObject _lookAt;
+    [SerializeField] private RenderTexture[] _renderTextures;
+    [SerializeField] private float _cameraAngle = 40f;
     [SerializeField] private float _radius = 5.0f;
     [SerializeField] private float _speed = 0.2f;
-    [SerializeField] private bool _multiDisplay = false;
-
-    private GameObject[] _cameras;
+    [SerializeField] private DisplayMode _displayMode = DisplayMode.SplitScreen;
 
     void Start()
     {
@@ -23,9 +26,9 @@ public class MultiDisplay : MonoBehaviour
         for (int i = 0; i < _cameras.Length; i++)
         {
             _cameras[i].transform.position = new Vector3(
-                _lookAt.transform.position.x + _radius * Mathf.Cos(Time.time * _speed + i * 2 * Mathf.PI / _cameras.Length),
+                _lookAt.transform.position.x + _radius * Mathf.Cos(Time.time * _speed + i),
                 _lookAt.transform.position.y,
-                _lookAt.transform.position.z + _radius * Mathf.Sin(Time.time * _speed + i * 2 * Mathf.PI / _cameras.Length)
+                _lookAt.transform.position.z + _radius * Mathf.Sin(Time.time * _speed + i)
             );
             _cameras[i].transform.LookAt(_lookAt.transform);
         }
@@ -33,23 +36,33 @@ public class MultiDisplay : MonoBehaviour
 
     void CreateCameras(){
         _cameras = new GameObject[_nCameras];
+        float angleInRadians = _cameraAngle * Mathf.Deg2Rad;
 
         for (int i = 0; i < _nCameras; i++)
         {
             _cameras[i] = new GameObject("Camera" + i);
             _cameras[i].AddComponent<Camera>();
             _cameras[i].transform.position = new Vector3(
-                _lookAt.transform.position.x + _radius * Mathf.Cos(i * 2 * Mathf.PI / _nCameras),
+                _lookAt.transform.position.x + _radius * Mathf.Cos(i * angleInRadians),
                 _lookAt.transform.position.y,
-                _lookAt.transform.position.z + _radius * Mathf.Sin(i * 2 * Mathf.PI / _nCameras)
+                _lookAt.transform.position.z + _radius * Mathf.Sin(i * angleInRadians)
             );
             _cameras[i].transform.LookAt(_lookAt.transform);
+            _cameras[i].GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+            _cameras[i].GetComponent<Camera>().backgroundColor = new Color(0, 0, 0, 0);
 
-            if (_multiDisplay)
+            // switch projection mode
+            switch (_displayMode)
             {
-                SetMultiDisplay(i);
-            } else {
-                SetSplitScreen(i);
+                case DisplayMode.MultiDisplay:
+                    SetMultiDisplay(i);
+                    break;
+                case DisplayMode.SplitScreen:
+                    SetSplitScreen(i);
+                    break;
+                case DisplayMode.Projection:
+                    SetProjection(i);
+                    break;
             }
         }
     }
@@ -62,21 +75,30 @@ public class MultiDisplay : MonoBehaviour
         _cameras[index].GetComponent<Camera>().rect = new Rect(index * 1.0f / _nCameras, 0, 1.0f / _nCameras, 1);
     }
 
+    void SetProjection(int index){
+        _cameras[index].GetComponent<Camera>().targetTexture = _renderTextures[index];
+        _cameras[index].GetComponent<Camera>().rect = new Rect(0, 0, 1, 1);
+    }
+
     // editor preview wireframe
     void OnDrawGizmos()
     {
+        float angleInRadians = _cameraAngle * Mathf.Deg2Rad;
+
+        // array of 3 colores
+        Color[] colors = { Color.red, Color.green, Color.blue };
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(_lookAt.transform.position, 0.5f);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(_lookAt.transform.position, _radius);
-        for (int i = 0; i < _nCameras; i++)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(_lookAt.transform.position, new Vector3(
-                _lookAt.transform.position.x + _radius * Mathf.Cos(i * 2 * Mathf.PI / _nCameras),
-                _lookAt.transform.position.y,
-                _lookAt.transform.position.z + _radius * Mathf.Sin(i * 2 * Mathf.PI / _nCameras)
-            )); 
+        // this part only when the game is running
+        if (Application.isPlaying) {
+            for (int i = 0; i < _nCameras; i++)
+            {
+                Gizmos.color = colors[i];
+                Gizmos.DrawLine(_lookAt.transform.position, _cameras[i].transform.position); 
+            }
         }
     }
 }
