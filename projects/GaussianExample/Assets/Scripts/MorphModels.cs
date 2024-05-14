@@ -7,45 +7,49 @@ using UnityEditor;
 public class MorphModels : MonoBehaviour
 {
     private float _timer = 0.0f;
-    private float _transitionDuration = 10.0f;
+    private float _transitionScaler = 0.2f;
+    private bool _isMorphing = false;
+    private GaussianSplatRenderer _currentModel;
+    private GaussianSplatRenderer _prevModel;
 
     private void OnEnable() {
-        GameManager.ModelChangeEvent += HandleModelChange;
+        GameManager.MorphStartEvent += HandleMorphStart;
     }
 
     private void OnDisable() {
-        GameManager.ModelChangeEvent -= HandleModelChange;
-    }
- 
-    private void Update() {
-        _timer += Time.deltaTime;
+        GameManager.MorphStartEvent -= HandleMorphStart;
     }
 
-    public void MorphToModel()
-    {
-        // lerp the opacity of the _models
-        StartCoroutine(LerpOpacity());
-    }
-
-    private IEnumerator LerpOpacity(){
-        // Lerp the opacity of the _models
-        _timer = 0.0f;
-        GaussianSplatRenderer currentModel = GameManager.Instance.CurrentModelObject.GetComponent<GaussianSplatRenderer>();
-        GaussianSplatRenderer prevModel = GameManager.Instance.PrevModelObject.GetComponent<GaussianSplatRenderer>();
-
-        while (_timer <= _transitionDuration) {
-            float interpol = _timer/_transitionDuration;
-
-            currentModel.m_OpacityScale = Mathf.Lerp(0.05f, 1.0f, interpol);
-            prevModel.m_OpacityScale = Mathf.Lerp(1.0f, 0.05f, interpol);
-            yield return null;
+    private void FixedUpdate() {
+        if(_isMorphing){
+            _timer += Time.fixedDeltaTime;
+            LerpOpacity();
         }
     }
 
-    private void HandleModelChange(){
-        // Morph to the new model
-        GameManager.Instance.CurrentModelObject.GetComponent<GaussianSplatRenderer>().m_OpacityScale = 0.05f;
+    private void LerpOpacity(){
+        float interpol = _timer*_transitionScaler;
+
+        _currentModel.m_OpacityScale = Mathf.Min(1f, _timer*_transitionScaler + 0.05f);
+        _prevModel.m_OpacityScale = Mathf.Max(0.05f, 1f - (_timer*_transitionScaler + 0.05f));
+        
+        if(_timer*_transitionScaler >= 1.0f){
+            Debug.Log("Morphing done.");
+            _prevModel.gameObject.SetActive(false);
+            _isMorphing = false;
+            GameManager.Instance.IsMorphing = false;
+        }
+    }
+
+    private void HandleMorphStart(){
+        Debug.Log("Morphing start.");
+        GameManager.Instance.IsMorphing = true;
+        _isMorphing = true;
+        
         GameManager.Instance.CurrentModelObject.SetActive(true);
-        MorphToModel();
+        _currentModel = GameManager.Instance.CurrentModelObject.GetComponent<GaussianSplatRenderer>();
+        _prevModel = GameManager.Instance.PrevModelObject.GetComponent<GaussianSplatRenderer>();
+        _currentModel.m_OpacityScale = 0.05f;
+        _timer = 0.0f;
     }
 }

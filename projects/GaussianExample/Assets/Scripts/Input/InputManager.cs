@@ -26,9 +26,11 @@ public class InputManager : MonoBehaviour
     
     private void Awake() {
         _instance = this;
+
         _input = new PlayerInput();
         _input.Simulation.DevShiftIndex.started += ctx => HandleDevShiftIndex(ctx);
         _input.Simulation.Look.performed += ctx => HandleLook(ctx);
+        _input.Installation.DevShiftIndex.started += ctx => HandleDevShiftIndex(ctx);
     }
 
     private void OnEnable() {

@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static event Action ModelChangeEvent;
+    public static event Action MorphStartEvent;
     public GameObject ModelManagerObject { get; private set; } // object that holds all the models
     public GameObject CurrentModelObject { get; private set; }
     public GameObject PrevModelObject { get; private set; }
@@ -27,10 +27,13 @@ public class GameManager : MonoBehaviour
     public int ZoomLevel { get; private set; }
 
     private int _numModels;
-    private int _currentModelIndex = 0; 
+    private int _currentModelIndex = 0;
+
+    public bool IsMorphing { get; set; }
     
     private void Awake() {
         _instance = this;
+        IsMorphing = false;
 
         ModelManagerObject = GameObject.Find("ModelManager");
         _numModels = ModelManagerObject.transform.childCount;
@@ -61,7 +64,7 @@ public class GameManager : MonoBehaviour
     // adjusts the CurrentModelObject by index for development purposes
     private void HandleDevShiftIndex(int indexShift){
         // check if the new index shift is valid
-        if (_currentModelIndex + indexShift < 0 || _currentModelIndex + indexShift >= _numModels){
+        if (_currentModelIndex + indexShift < 0 || _currentModelIndex + indexShift >= _numModels || IsMorphing){
             Debug.Log("Invalid index shift");
             return;
         } else {
@@ -75,6 +78,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("new model index: " + _currentModelIndex);
         Debug.Log("new model name: " + modelName);
         
-        ModelChangeEvent?.Invoke();
+        MorphStartEvent?.Invoke();
     }
 }

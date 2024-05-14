@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiDisplay : MonoBehaviour
+public class DisplayManager : MonoBehaviour
 {
     private enum DisplayMode { MultiDisplay, SplitScreen, Projection };
     private GameObject[] _cameras;
@@ -10,6 +10,7 @@ public class MultiDisplay : MonoBehaviour
 
     [SerializeField] private GameObject _lookAt;
     [SerializeField] private RenderTexture[] _renderTextures;
+    [SerializeField] private bool _distributeCamerasEvenly = true;
     [SerializeField] private float _cameraAngle = 40f;
     [SerializeField] private float _radius = 5.0f;
     [SerializeField] private float _speed = 0.2f;
@@ -42,11 +43,9 @@ public class MultiDisplay : MonoBehaviour
         {
             _cameras[i] = new GameObject("Camera" + i);
             _cameras[i].AddComponent<Camera>();
-            _cameras[i].transform.position = new Vector3(
-                _lookAt.transform.position.x + _radius * Mathf.Cos(i * angleInRadians),
-                _lookAt.transform.position.y,
-                _lookAt.transform.position.z + _radius * Mathf.Sin(i * angleInRadians)
-            );
+
+            SetCameraPosition(i, angleInRadians);
+            
             _cameras[i].transform.LookAt(_lookAt.transform);
             _cameras[i].GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             _cameras[i].GetComponent<Camera>().backgroundColor = new Color(0, 0, 0, 0);
@@ -55,15 +54,35 @@ public class MultiDisplay : MonoBehaviour
             switch (_displayMode)
             {
                 case DisplayMode.MultiDisplay:
+                    Camera.main.targetDisplay = _nCameras;
                     SetMultiDisplay(i);
                     break;
                 case DisplayMode.SplitScreen:
+                    Camera.main.targetDisplay = 1;
                     SetSplitScreen(i);
                     break;
                 case DisplayMode.Projection:
+                    Camera.main.targetDisplay = 0;
                     SetProjection(i);
                     break;
             }
+        }
+    }
+
+    // distribute cameras around the _lookAt object
+    void SetCameraPosition(int index, float angleInRadians){
+        if(_distributeCamerasEvenly){
+            _cameras[index].transform.position = new Vector3(
+                _lookAt.transform.position.x + _radius * Mathf.Cos(index * 2 * Mathf.PI / _nCameras),
+                _lookAt.transform.position.y,
+                _lookAt.transform.position.z + _radius * Mathf.Sin(index * 2 * Mathf.PI / _nCameras)
+            );
+        } else {
+            _cameras[index].transform.position = new Vector3( 
+                _lookAt.transform.position.x + _radius * Mathf.Cos(index * angleInRadians),
+                _lookAt.transform.position.y,
+                _lookAt.transform.position.z + _radius * Mathf.Sin(index * angleInRadians)
+            );
         }
     }
 
@@ -71,8 +90,9 @@ public class MultiDisplay : MonoBehaviour
         _cameras[index].GetComponent<Camera>().targetDisplay = index;
     }
 
-    void SetSplitScreen(int index){
+    void SetSplitScreen(int index, int displayIndex = 0){
         _cameras[index].GetComponent<Camera>().rect = new Rect(index * 1.0f / _nCameras, 0, 1.0f / _nCameras, 1);
+        _cameras[index].GetComponent<Camera>().targetDisplay = displayIndex;
     }
 
     void SetProjection(int index){
