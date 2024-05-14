@@ -14,10 +14,16 @@ public class MorphModels : MonoBehaviour
 
     private void OnEnable() {
         GameManager.MorphStartEvent += HandleMorphStart;
+        GameManager.NewSplatSizeEvent += HandleNewSplatSize;
     }
 
     private void OnDisable() {
         GameManager.MorphStartEvent -= HandleMorphStart;
+        GameManager.NewSplatSizeEvent -= HandleNewSplatSize;
+    }
+
+    private void Start() {
+        _currentModel = GameManager.Instance.CurrentModelObject.GetComponent<GaussianSplatRenderer>();
     }
 
     private void FixedUpdate() {
@@ -51,5 +57,10 @@ public class MorphModels : MonoBehaviour
         _prevModel = GameManager.Instance.PrevModelObject.GetComponent<GaussianSplatRenderer>();
         _currentModel.m_OpacityScale = 0.05f;
         _timer = 0.0f;
+    }
+
+    private void HandleNewSplatSize(float newSize){
+        _currentModel.m_SplatScale = newSize;
+        if(_prevModel) _prevModel.m_SplatScale = newSize;
     }
 }
