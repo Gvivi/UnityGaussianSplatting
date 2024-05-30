@@ -6,7 +6,7 @@
             "id": "d019e108-ca48-4a49-93f6-cedc5774d460",
             "actions": [
                 {
-                    "name": "ChangeModel",
+                    "name": "ChangeGSAsset",
                     "type": "Value",
                     "id": "3b6d9ca9-e407-4028-91f8-3cf426f42ad6",
                     "expectedControlType": "Axis",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ChangeSplatSize",
+                    "name": "ChangeSplatScale",
                     "type": "Value",
                     "id": "e2480122-3386-4619-9532-e9da890a1822",
                     "expectedControlType": "Axis",
@@ -32,7 +32,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeModel",
+                    "action": "ChangeGSAsset",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -43,7 +43,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeModel",
+                    "action": "ChangeGSAsset",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -54,7 +54,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeModel",
+                    "action": "ChangeGSAsset",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -65,7 +65,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeSplatSize",
+                    "action": "ChangeSplatScale",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -76,7 +76,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeSplatSize",
+                    "action": "ChangeSplatScale",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -87,7 +87,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeSplatSize",
+                    "action": "ChangeSplatScale",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }
@@ -116,7 +116,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ChangeModel",
+                    "name": "ChangeGSAsset",
                     "type": "Value",
                     "id": "0ad64683-8c17-4fa4-8ecf-18e86ab58824",
                     "expectedControlType": "Axis",
@@ -125,7 +125,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ChangeSplatSize",
+                    "name": "ChangeSplatScale",
                     "type": "Value",
                     "id": "72a25b4f-0932-493a-9030-aee5b0edef5d",
                     "expectedControlType": "Axis",
@@ -142,7 +142,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeModel",
+                    "action": "ChangeGSAsset",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -153,7 +153,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeModel",
+                    "action": "ChangeGSAsset",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -164,7 +164,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeModel",
+                    "action": "ChangeGSAsset",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -241,7 +241,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeSplatSize",
+                    "action": "ChangeSplatScale",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -252,7 +252,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeSplatSize",
+                    "action": "ChangeSplatScale",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -263,7 +263,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeSplatSize",
+                    "action": "ChangeSplatScale",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

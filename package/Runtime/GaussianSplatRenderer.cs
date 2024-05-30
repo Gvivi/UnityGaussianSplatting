@@ -216,7 +216,7 @@ namespace GaussianSplatting.Runtime
 
         [Range(0.1f, 2.0f)] [Tooltip("Additional scaling factor for the splats")]
         public float m_SplatScale = 1.0f;
-        [Range(0.05f, 20.0f)]
+        [Range(0.0f, 20.0f)]
         [Tooltip("Additional scaling factor for opacity")]
         public float m_OpacityScale = 1.0f;
         [Range(0, 3)] [Tooltip("Spherical Harmonics order to use")]
@@ -245,10 +245,20 @@ namespace GaussianSplatting.Runtime
         GraphicsBuffer m_GpuOtherData;
         GraphicsBuffer m_GpuSHData;
         Texture m_GpuColorData;
+        RenderTexture m_GpuColorDataRT;
+
         internal GraphicsBuffer m_GpuChunks;
         internal bool m_GpuChunksValid;
         internal GraphicsBuffer m_GpuView;
         internal GraphicsBuffer m_GpuIndexBuffer;
+
+        // target splat data for morphing
+        int m_TargetSplatCount;
+        GraphicsBuffer m_GpuTargetPosData;
+        GraphicsBuffer m_GpuTargetOtherData;
+        GraphicsBuffer m_GpuTargetSHData;
+        Texture m_GpuTargetColorData;
+
 
         // these buffers are only for splat editing, and are lazily created
         GraphicsBuffer m_GpuEditCutouts;
@@ -316,6 +326,12 @@ namespace GaussianSplatting.Runtime
             public static readonly int SelectionMode = Shader.PropertyToID("_SelectionMode");
             public static readonly int SplatPosMouseDown = Shader.PropertyToID("_SplatPosMouseDown");
             public static readonly int SplatOtherMouseDown = Shader.PropertyToID("_SplatOtherMouseDown");
+            public static readonly int MorphSpeed = Shader.PropertyToID("_MorphSpeed");
+            public static readonly int TargetSplatPos = Shader.PropertyToID("_TargetSplatPos");
+            public static readonly int TargetSplatOther = Shader.PropertyToID("_TargetSplatOther");
+            public static readonly int TargetSplatSH = Shader.PropertyToID("_TargetSplatSH");
+            public static readonly int TargetSplatColor = Shader.PropertyToID("_TargetSplatColor");
+            public static readonly int TargetSplatCount = Shader.PropertyToID("_TargetSplatCount");
         }
 
         [field: NonSerialized] public bool editModified { get; private set; }
@@ -342,6 +358,7 @@ namespace GaussianSplatting.Runtime
             TranslateSelection,
             RotateSelection,
             ScaleSelection,
+            MorphSplats,
             ExportData,
             CopySplats,
         }
@@ -376,6 +393,10 @@ namespace GaussianSplatting.Runtime
             tex.SetPixelData(asset.colorData.GetData<byte>(), 0);
             tex.Apply(false, true);
             m_GpuColorData = tex;
+            m_GpuColorDataRT = new RenderTexture(texWidth, texHeight, 0, GraphicsFormat.R16G16B16A16_SFloat) { name = "GaussianColorDataRT" };
+            m_GpuColorDataRT.enableRandomWrite = true;
+            m_GpuColorDataRT.Create();
+            Graphics.Blit(m_GpuColorData, m_GpuColorDataRT);
             if (asset.chunkData != null && asset.chunkData.dataSize != 0)
             {
                 m_GpuChunks = new GraphicsBuffer(GraphicsBuffer.Target.Structured,
@@ -406,6 +427,21 @@ namespace GaussianSplatting.Runtime
             });
 
             InitSortBuffers(splatCount);
+
+            // target splat data for morphing
+            m_TargetSplatCount = asset.splatCount;
+            m_GpuTargetPosData = new GraphicsBuffer(GraphicsBuffer.Target.Raw | GraphicsBuffer.Target.CopySource, (int) (asset.posData.dataSize / 4), 4) { name = "GaussianTargetPosData" };
+            m_GpuTargetPosData.SetData(asset.posData.GetData<uint>());
+            m_GpuTargetOtherData = new GraphicsBuffer(GraphicsBuffer.Target.Raw | GraphicsBuffer.Target.CopySource, (int) (asset.otherData.dataSize / 4), 4) { name = "GaussianTargetOtherData" };
+            m_GpuTargetOtherData.SetData(asset.otherData.GetData<uint>());
+            m_GpuTargetSHData = new GraphicsBuffer(GraphicsBuffer.Target.Raw, (int) (asset.shData.dataSize / 4), 4) { name = "GaussianTargetSHData" };
+            m_GpuTargetSHData.SetData(asset.shData.GetData<uint>());
+            var (texWidth2, texHeight2) = GaussianSplatAsset.CalcTextureSize(asset.splatCount);
+            var texFormat2 = GaussianSplatAsset.ColorFormatToGraphics(asset.colorFormat);
+            var tex2 = new Texture2D(texWidth2, texHeight2, texFormat2, TextureCreationFlags.DontInitializePixels | TextureCreationFlags.IgnoreMipmapLimit | TextureCreationFlags.DontUploadUponCreate) { name = "GaussianTargetColorData" };
+            tex2.SetPixelData(asset.colorData.GetData<byte>(), 0);
+            tex2.Apply(false, true);
+            m_GpuTargetColorData = tex2;
         }
 
         void InitSortBuffers(int count)
@@ -457,11 +493,17 @@ namespace GaussianSplatting.Runtime
             cmb.SetComputeBufferParam(cs, kernelIndex, Props.SplatChunks, m_GpuChunks);
             cmb.SetComputeBufferParam(cs, kernelIndex, Props.SplatOther, m_GpuOtherData);
             cmb.SetComputeBufferParam(cs, kernelIndex, Props.SplatSH, m_GpuSHData);
-            cmb.SetComputeTextureParam(cs, kernelIndex, Props.SplatColor, m_GpuColorData);
+            cmb.SetComputeTextureParam(cs, kernelIndex, Props.SplatColor, m_GpuColorDataRT);
             cmb.SetComputeBufferParam(cs, kernelIndex, Props.SplatSelectedBits, m_GpuEditSelected ?? m_GpuPosData);
             cmb.SetComputeBufferParam(cs, kernelIndex, Props.SplatDeletedBits, m_GpuEditDeleted ?? m_GpuPosData);
             cmb.SetComputeBufferParam(cs, kernelIndex, Props.SplatViewData, m_GpuView);
             cmb.SetComputeBufferParam(cs, kernelIndex, Props.OrderBuffer, m_GpuSortKeys);
+
+            // target splat data for morphing
+            cmb.SetComputeBufferParam(cs, kernelIndex, Props.TargetSplatPos, m_GpuTargetPosData);
+            cmb.SetComputeBufferParam(cs, kernelIndex, Props.TargetSplatOther, m_GpuTargetOtherData);
+            cmb.SetComputeBufferParam(cs, kernelIndex, Props.TargetSplatSH, m_GpuTargetSHData);
+            cmb.SetComputeTextureParam(cs, kernelIndex, Props.TargetSplatColor, m_GpuTargetColorData);
 
             cmb.SetComputeIntParam(cs, Props.SplatBitsValid, m_GpuEditSelected != null && m_GpuEditDeleted != null ? 1 : 0);
             uint format = (uint)m_Asset.posFormat | ((uint)m_Asset.scaleFormat << 8) | ((uint)m_Asset.shFormat << 16);
@@ -479,7 +521,7 @@ namespace GaussianSplatting.Runtime
             mat.SetBuffer(Props.SplatPos, m_GpuPosData);
             mat.SetBuffer(Props.SplatOther, m_GpuOtherData);
             mat.SetBuffer(Props.SplatSH, m_GpuSHData);
-            mat.SetTexture(Props.SplatColor, m_GpuColorData);
+            mat.SetTexture(Props.SplatColor, m_GpuColorDataRT);
             mat.SetBuffer(Props.SplatSelectedBits, m_GpuEditSelected ?? m_GpuPosData);
             mat.SetBuffer(Props.SplatDeletedBits, m_GpuEditDeleted ?? m_GpuPosData);
             mat.SetInt(Props.SplatBitsValid, m_GpuEditSelected != null && m_GpuEditDeleted != null ? 1 : 0);
@@ -498,6 +540,7 @@ namespace GaussianSplatting.Runtime
         void DisposeResourcesForAsset()
         {
             DestroyImmediate(m_GpuColorData);
+            DestroyImmediate(m_GpuColorDataRT);
 
             DisposeBuffer(ref m_GpuPosData);
             DisposeBuffer(ref m_GpuOtherData);
@@ -516,6 +559,11 @@ namespace GaussianSplatting.Runtime
             DisposeBuffer(ref m_GpuEditDeleted);
             DisposeBuffer(ref m_GpuEditCountsBounds);
             DisposeBuffer(ref m_GpuEditCutouts);
+
+            DisposeBuffer(ref m_GpuTargetPosData);
+            DisposeBuffer(ref m_GpuTargetOtherData);
+            DisposeBuffer(ref m_GpuTargetSHData);
+            DestroyImmediate(m_GpuTargetColorData); 
 
             m_SorterArgs.resources.Dispose();
 
@@ -741,6 +789,47 @@ namespace GaussianSplatting.Runtime
                 ClearGraphicsBuffer(m_GpuEditDeleted);
             }
             return m_GpuEditSelected != null;
+        }
+
+        public void UpdateTargetAsset(GaussianSplatAsset targetAsset)
+        {
+            if (targetAsset == null)
+                return;
+            
+            Debug.Log("UpdateTargetAsset");
+
+            m_GpuTargetPosData.Dispose();
+            m_GpuTargetOtherData.Dispose();
+            m_GpuTargetSHData.Dispose();
+            DestroyImmediate(m_GpuTargetColorData);
+
+            m_TargetSplatCount = targetAsset.splatCount;
+            m_GpuTargetPosData = new GraphicsBuffer(GraphicsBuffer.Target.Raw | GraphicsBuffer.Target.CopySource, (int) (targetAsset.posData.dataSize / 4), 4) { name = "GaussianTargetPosData" };
+            m_GpuTargetPosData.SetData(targetAsset.posData.GetData<uint>());
+            m_GpuTargetOtherData = new GraphicsBuffer(GraphicsBuffer.Target.Raw | GraphicsBuffer.Target.CopySource, (int) (targetAsset.otherData.dataSize / 4), 4) { name = "GaussianTargetOtherData" };
+            m_GpuTargetOtherData.SetData(targetAsset.otherData.GetData<uint>());
+            m_GpuTargetSHData = new GraphicsBuffer(GraphicsBuffer.Target.Raw, (int) (targetAsset.shData.dataSize / 4), 4) { name = "GaussianTargetSHData" };
+            m_GpuTargetSHData.SetData(targetAsset.shData.GetData<uint>());
+            var (texWidth, texHeight) = GaussianSplatAsset.CalcTextureSize(targetAsset.splatCount);
+            var texFormat = GaussianSplatAsset.ColorFormatToGraphics(targetAsset.colorFormat);
+            var tex = new Texture2D(texWidth, texHeight, texFormat, TextureCreationFlags.DontInitializePixels | TextureCreationFlags.IgnoreMipmapLimit | TextureCreationFlags.DontUploadUponCreate) { name = "GaussianTargetColorData" };
+            tex.SetPixelData(targetAsset.colorData.GetData<byte>(), 0);
+            tex.Apply(false, true);
+            m_GpuTargetColorData = tex;
+        }
+
+        public void MorphSplats(float morphSpeed)
+        {
+            if (!EnsureEditingBuffers()) return;
+
+            using var cmb = new CommandBuffer { name = "SplatMorph" };
+            SetAssetDataOnCS(cmb, KernelIndices.MorphSplats);
+
+            cmb.SetComputeFloatParam(m_CSSplatUtilities, Props.MorphSpeed, morphSpeed);
+            cmb.SetComputeIntParam(m_CSSplatUtilities, Props.TargetSplatCount, m_TargetSplatCount);
+
+            DispatchUtilsAndExecute(cmb, KernelIndices.MorphSplats, m_SplatCount);
+            editModified = true;
         }
 
         public void EditStoreSelectionMouseDown()
@@ -979,6 +1068,7 @@ namespace GaussianSplatting.Runtime
             m_GpuOtherData = newOtherData;
             m_GpuSHData = newSHData;
             m_GpuColorData = newColorData;
+            Graphics.Blit(m_GpuColorData, m_GpuColorDataRT);
             m_GpuView = newGpuView;
             m_GpuEditSelected = newEditSelected;
             m_GpuEditSelectedMouseDown = newEditSelectedMouseDown;

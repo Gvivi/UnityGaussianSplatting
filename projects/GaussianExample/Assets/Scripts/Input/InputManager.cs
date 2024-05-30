@@ -20,8 +20,8 @@ public class InputManager : MonoBehaviour
 
     private PlayerInput _input;
 
-    public event Action<int> ModelChangeEvent;
-    public event Action<float> SplatSizeChangeEvent;
+    public event Action<int> GSAssetChangeEvent;
+    public event Action<float> SplatScaleChangeEvent;
     public event Action<Vector2> MoveEvent;
     public event Action<Vector2> LookEvent;
     
@@ -30,10 +30,10 @@ public class InputManager : MonoBehaviour
 
         _input = new PlayerInput();
         _input.Simulation.Look.performed += ctx => HandleLook(ctx);
-        _input.Simulation.ChangeModel.started += ctx => HandleChangeModel(ctx);
-        _input.Simulation.ChangeSplatSize.started += ctx => HandleChangeSplatSize(ctx);
-        _input.Installation.ChangeModel.started += ctx => HandleChangeModel(ctx);
-        _input.Installation.ChangeSplatSize.started += ctx => HandleChangeSplatSize(ctx);
+        _input.Simulation.ChangeGSAsset.started += ctx => HandleChangeGSAsset(ctx);
+        _input.Simulation.ChangeSplatScale.started += ctx => HandleChangeSplatScale(ctx);
+        _input.Installation.ChangeGSAsset.started += ctx => HandleChangeGSAsset(ctx);
+        _input.Installation.ChangeSplatScale.started += ctx => HandleChangeSplatScale(ctx);
     }
 
     private void OnEnable() {
@@ -59,15 +59,13 @@ public class InputManager : MonoBehaviour
         LookEvent?.Invoke(context.ReadValue<Vector2>());
     }
 
-    private void HandleChangeModel(InputAction.CallbackContext context){
-        // pass on int value to GameManager
+    private void HandleChangeGSAsset(InputAction.CallbackContext context){
         float input = context.ReadValue<float>();
         int value = (input > 0) ? 1 : -1;
-        ModelChangeEvent?.Invoke(value);
+        GSAssetChangeEvent?.Invoke(value);
     }
 
-    private void HandleChangeSplatSize(InputAction.CallbackContext context){
-        // pass on float value to GameManager
-        SplatSizeChangeEvent?.Invoke(context.ReadValue<float>());
+    private void HandleChangeSplatScale(InputAction.CallbackContext context){
+        SplatScaleChangeEvent?.Invoke(context.ReadValue<float>());
     }
 }

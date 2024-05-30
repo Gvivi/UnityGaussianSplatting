@@ -313,7 +313,7 @@ uint EncodeQuatToNorm10(float4 v) // 32 bits: 10.10.10.2
 SplatBufferDataType _SplatPos;
 SplatBufferDataType _SplatOther;
 SplatBufferDataType _SplatSH;
-Texture2D _SplatColor;
+RWTexture2D<float4> _SplatColor;
 uint _SplatFormat;
 
 // Match GaussianSplatAsset.VectorFormat

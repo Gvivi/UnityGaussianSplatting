@@ -14,6 +14,7 @@
 #pragma kernel CSTranslateSelection
 #pragma kernel CSRotateSelection
 #pragma kernel CSScaleSelection
+#pragma kernel CSMorphSplats
 #pragma kernel CSExportData
 #pragma kernel CSCopySplats
 
@@ -513,6 +514,90 @@ void CSScaleSelection (uint3 id : SV_DispatchThreadID)
         pos += _SelectionCenter;
         _SplatPos.Store3(idx * stride, asuint(pos));
     }
+}
+
+float _MorphSpeed;
+uint _TargetSplatCount;
+ByteAddressBuffer _TargetSplatPos;
+ByteAddressBuffer _TargetSplatOther;
+ByteAddressBuffer _TargetSplatSH;
+Texture2D<float4> _TargetSplatColor;
+
+// only for quality very high (for now)
+[numthreads(GROUP_SIZE,1,1)]
+void CSMorphSplats (uint3 id : SV_DispatchThreadID)
+{
+    uint idx = id.x;
+    if (idx >= _SplatCount)
+        return;
+    
+    SplatData src = LoadSplatData(idx);
+
+    if (idx >= _TargetSplatCount) // no target splat, morph opacity to 0
+    {
+        src.opacity = lerp(src.opacity, 0, _MorphSpeed*10);
+        _SplatColor[SplatIndexToPixelIndex(idx).xy] = float4(src.sh.col, src.opacity);
+        return;
+    }
+
+    // morph position
+    uint posFmt = _SplatFormat & 0xFF;
+    if (_SplatChunkCount == 0 && posFmt == VECTOR_FMT_32F)
+    {
+        uint posStride = 12;
+        float3 pos = asfloat(_SplatPos.Load3(idx * posStride));
+        float3 targetPos = asfloat(_TargetSplatPos.Load3(idx * posStride));
+        
+        pos = lerp(pos, targetPos, _MorphSpeed);
+
+        _SplatPos.Store3(idx * posStride, asuint(pos));
+    }
+
+    uint scaleFmt = (_SplatFormat >> 8) & 0xFF;
+    uint shFormat = (_SplatFormat >> 16) & 0xFF;
+
+    uint otherStride = 4; // rotation is 10.10.10.2
+    otherStride += 12;
+    uint otherAddr = idx * otherStride;
+    uint shStride = shStride = 192; // 15*3 fp32, rounded up to multiple of 16
+
+    // morph rotation
+    if (_SplatChunkCount == 0 && scaleFmt == VECTOR_FMT_32F && shFormat == VECTOR_FMT_32F)
+    {
+        uint rotVal = _SplatOther.Load(idx * otherStride); // rotation/scale at start of operation
+        float4 rot = DecodeRotation(DecodePacked_10_10_10_2(rotVal));
+
+        float4 targetRotVal = _TargetSplatOther.Load(idx * otherStride);
+        float4 targetRot = DecodeRotation(DecodePacked_10_10_10_2(targetRotVal));
+
+        rot = lerp(rot, targetRot, _MorphSpeed);
+
+        rotVal = EncodeQuatToNorm10(PackSmallest3Rotation(rot));
+        _SplatOther.Store(idx * otherStride, rotVal);
+    }
+
+    // morph scale
+    float3 scale = asfloat(_SplatOther.Load3(otherAddr + 4));
+    float3 targetScale = asfloat(_TargetSplatOther.Load3(otherAddr + 4));
+    scale = lerp(scale, targetScale, _MorphSpeed);
+    _SplatOther.Store3(otherAddr + 4, asuint(scale));
+    
+    // morph SH
+    uint shOffset = idx * shStride;
+    
+    for (uint i = 0; i < 16; i++) {
+        float3 sh = asfloat(_SplatSH.Load3(shOffset + 12 * i));
+        float3 targetSH = asfloat(_TargetSplatSH.Load3(shOffset + 12 * i));
+        sh = lerp(sh, targetSH, _MorphSpeed);
+        _SplatSH.Store3(shOffset + 12 * i, asuint(sh));
+    }
+    
+    // morph texture
+    uint3 pixelIndex = SplatIndexToPixelIndex(idx);
+    float4 targetColor = _TargetSplatColor[pixelIndex.xy];
+    float4 color = float4(src.sh.col, src.opacity);
+    color = lerp(color, targetColor, _MorphSpeed);
+    _SplatColor[pixelIndex.xy] = color;
 }
 
 struct ExportSplatData

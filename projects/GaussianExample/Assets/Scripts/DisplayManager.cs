@@ -5,15 +5,18 @@ using UnityEngine;
 public class DisplayManager : MonoBehaviour
 {
     private enum DisplayMode { MultiDisplay, SplitScreen, Projection };
+    private GameObject _cameraParent;
     private GameObject[] _cameras;
     private int _nCameras = 3;
 
     [SerializeField] private GameObject _lookAt;
+    [Tooltip("RenderTextures only used for projections in simulation scene.")]
     [SerializeField] private RenderTexture[] _renderTextures;
     [SerializeField] private bool _distributeCamerasEvenly = true;
     [SerializeField] private float _cameraAngle = 40f;
     [SerializeField] private float _radius = 5.0f;
-    [SerializeField] private float _speed = 0.2f;
+    [Tooltip("Seconds for a full rotation.")]
+    [SerializeField] private float _speed = 40f;
     [SerializeField] private DisplayMode _displayMode = DisplayMode.SplitScreen;
 
     void Start()
@@ -23,25 +26,19 @@ public class DisplayManager : MonoBehaviour
 
     void Update()
     {
-        // move cameras around the _lookAt object
-        for (int i = 0; i < _cameras.Length; i++)
-        {
-            _cameras[i].transform.position = new Vector3(
-                _lookAt.transform.position.x + _radius * Mathf.Cos(Time.time * _speed + i),
-                _lookAt.transform.position.y,
-                _lookAt.transform.position.z + _radius * Mathf.Sin(Time.time * _speed + i)
-            );
-            _cameras[i].transform.LookAt(_lookAt.transform);
-        }
+        _cameraParent.transform.Rotate(-Vector3.up * Time.deltaTime * 360f/_speed);
     }
 
     void CreateCameras(){
+        _cameraParent = new GameObject("Cameras");
         _cameras = new GameObject[_nCameras];
+        
         float angleInRadians = _cameraAngle * Mathf.Deg2Rad;
 
         for (int i = 0; i < _nCameras; i++)
         {
             _cameras[i] = new GameObject("Camera" + i);
+            _cameras[i].transform.parent = _cameraParent.transform;
             _cameras[i].AddComponent<Camera>();
 
             SetCameraPosition(i, angleInRadians);
@@ -105,13 +102,34 @@ public class DisplayManager : MonoBehaviour
     {
         float angleInRadians = _cameraAngle * Mathf.Deg2Rad;
 
-        // array of 3 colores
-        Color[] colors = { Color.red, Color.green, Color.blue };
+        Color[] colors = { Color.cyan, Color.yellow, Color.magenta };
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(_lookAt.transform.position, 0.5f);
+        Gizmos.DrawWireSphere(_lookAt.transform.position, 0.5f); // preview lookAt point
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(_lookAt.transform.position, _radius);
+        Gizmos.DrawWireSphere(_lookAt.transform.position, _radius); // preview radius
+
+        Gizmos.color = Color.blue;
+        // preview cameras in editor
+        if(_distributeCamerasEvenly){
+            for (int i = 0; i < 3; i++)
+            {
+                Gizmos.DrawLine(_lookAt.transform.position, new Vector3(
+                    _lookAt.transform.position.x + _radius * Mathf.Cos(i * 2 * Mathf.PI / _nCameras),
+                    _lookAt.transform.position.y,
+                    _lookAt.transform.position.z + _radius * Mathf.Sin(i * 2 * Mathf.PI / _nCameras)
+                ));
+            }
+        } else {
+            for (int i = 0; i < 3; i++)
+            {
+                Gizmos.DrawLine(_lookAt.transform.position, new Vector3(
+                    _lookAt.transform.position.x + _radius * Mathf.Cos(i * angleInRadians),
+                    _lookAt.transform.position.y,
+                    _lookAt.transform.position.z + _radius * Mathf.Sin(i * angleInRadians)
+                ));
+            }
+        }
         // this part only when the game is running
         if (Application.isPlaying) {
             for (int i = 0; i < _nCameras; i++)

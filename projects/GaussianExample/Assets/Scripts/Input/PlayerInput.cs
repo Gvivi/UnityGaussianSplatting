@@ -28,7 +28,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ""id"": ""d019e108-ca48-4a49-93f6-cedc5774d460"",
             ""actions"": [
                 {
-                    ""name"": ""ChangeModel"",
+                    ""name"": ""ChangeGSAsset"",
                     ""type"": ""Value"",
                     ""id"": ""3b6d9ca9-e407-4028-91f8-3cf426f42ad6"",
                     ""expectedControlType"": ""Axis"",
@@ -37,7 +37,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ChangeSplatSize"",
+                    ""name"": ""ChangeSplatScale"",
                     ""type"": ""Value"",
                     ""id"": ""e2480122-3386-4619-9532-e9da890a1822"",
                     ""expectedControlType"": ""Axis"",
@@ -54,7 +54,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeModel"",
+                    ""action"": ""ChangeGSAsset"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -65,7 +65,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeModel"",
+                    ""action"": ""ChangeGSAsset"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -76,7 +76,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeModel"",
+                    ""action"": ""ChangeGSAsset"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -87,7 +87,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeSplatSize"",
+                    ""action"": ""ChangeSplatScale"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -98,7 +98,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeSplatSize"",
+                    ""action"": ""ChangeSplatScale"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -109,7 +109,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeSplatSize"",
+                    ""action"": ""ChangeSplatScale"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -138,7 +138,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ChangeModel"",
+                    ""name"": ""ChangeGSAsset"",
                     ""type"": ""Value"",
                     ""id"": ""0ad64683-8c17-4fa4-8ecf-18e86ab58824"",
                     ""expectedControlType"": ""Axis"",
@@ -147,7 +147,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ChangeSplatSize"",
+                    ""name"": ""ChangeSplatScale"",
                     ""type"": ""Value"",
                     ""id"": ""72a25b4f-0932-493a-9030-aee5b0edef5d"",
                     ""expectedControlType"": ""Axis"",
@@ -164,7 +164,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeModel"",
+                    ""action"": ""ChangeGSAsset"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -175,7 +175,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeModel"",
+                    ""action"": ""ChangeGSAsset"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -186,7 +186,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeModel"",
+                    ""action"": ""ChangeGSAsset"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -263,7 +263,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeSplatSize"",
+                    ""action"": ""ChangeSplatScale"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -274,7 +274,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeSplatSize"",
+                    ""action"": ""ChangeSplatScale"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -285,7 +285,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeSplatSize"",
+                    ""action"": ""ChangeSplatScale"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -296,14 +296,14 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
 }");
         // Installation
         m_Installation = asset.FindActionMap("Installation", throwIfNotFound: true);
-        m_Installation_ChangeModel = m_Installation.FindAction("ChangeModel", throwIfNotFound: true);
-        m_Installation_ChangeSplatSize = m_Installation.FindAction("ChangeSplatSize", throwIfNotFound: true);
+        m_Installation_ChangeGSAsset = m_Installation.FindAction("ChangeGSAsset", throwIfNotFound: true);
+        m_Installation_ChangeSplatScale = m_Installation.FindAction("ChangeSplatScale", throwIfNotFound: true);
         // Simulation
         m_Simulation = asset.FindActionMap("Simulation", throwIfNotFound: true);
         m_Simulation_Look = m_Simulation.FindAction("Look", throwIfNotFound: true);
         m_Simulation_Move = m_Simulation.FindAction("Move", throwIfNotFound: true);
-        m_Simulation_ChangeModel = m_Simulation.FindAction("ChangeModel", throwIfNotFound: true);
-        m_Simulation_ChangeSplatSize = m_Simulation.FindAction("ChangeSplatSize", throwIfNotFound: true);
+        m_Simulation_ChangeGSAsset = m_Simulation.FindAction("ChangeGSAsset", throwIfNotFound: true);
+        m_Simulation_ChangeSplatScale = m_Simulation.FindAction("ChangeSplatScale", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -365,14 +365,14 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     // Installation
     private readonly InputActionMap m_Installation;
     private List<IInstallationActions> m_InstallationActionsCallbackInterfaces = new List<IInstallationActions>();
-    private readonly InputAction m_Installation_ChangeModel;
-    private readonly InputAction m_Installation_ChangeSplatSize;
+    private readonly InputAction m_Installation_ChangeGSAsset;
+    private readonly InputAction m_Installation_ChangeSplatScale;
     public struct InstallationActions
     {
         private @PlayerInput m_Wrapper;
         public InstallationActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @ChangeModel => m_Wrapper.m_Installation_ChangeModel;
-        public InputAction @ChangeSplatSize => m_Wrapper.m_Installation_ChangeSplatSize;
+        public InputAction @ChangeGSAsset => m_Wrapper.m_Installation_ChangeGSAsset;
+        public InputAction @ChangeSplatScale => m_Wrapper.m_Installation_ChangeSplatScale;
         public InputActionMap Get() { return m_Wrapper.m_Installation; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -382,22 +382,22 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_InstallationActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_InstallationActionsCallbackInterfaces.Add(instance);
-            @ChangeModel.started += instance.OnChangeModel;
-            @ChangeModel.performed += instance.OnChangeModel;
-            @ChangeModel.canceled += instance.OnChangeModel;
-            @ChangeSplatSize.started += instance.OnChangeSplatSize;
-            @ChangeSplatSize.performed += instance.OnChangeSplatSize;
-            @ChangeSplatSize.canceled += instance.OnChangeSplatSize;
+            @ChangeGSAsset.started += instance.OnChangeGSAsset;
+            @ChangeGSAsset.performed += instance.OnChangeGSAsset;
+            @ChangeGSAsset.canceled += instance.OnChangeGSAsset;
+            @ChangeSplatScale.started += instance.OnChangeSplatScale;
+            @ChangeSplatScale.performed += instance.OnChangeSplatScale;
+            @ChangeSplatScale.canceled += instance.OnChangeSplatScale;
         }
 
         private void UnregisterCallbacks(IInstallationActions instance)
         {
-            @ChangeModel.started -= instance.OnChangeModel;
-            @ChangeModel.performed -= instance.OnChangeModel;
-            @ChangeModel.canceled -= instance.OnChangeModel;
-            @ChangeSplatSize.started -= instance.OnChangeSplatSize;
-            @ChangeSplatSize.performed -= instance.OnChangeSplatSize;
-            @ChangeSplatSize.canceled -= instance.OnChangeSplatSize;
+            @ChangeGSAsset.started -= instance.OnChangeGSAsset;
+            @ChangeGSAsset.performed -= instance.OnChangeGSAsset;
+            @ChangeGSAsset.canceled -= instance.OnChangeGSAsset;
+            @ChangeSplatScale.started -= instance.OnChangeSplatScale;
+            @ChangeSplatScale.performed -= instance.OnChangeSplatScale;
+            @ChangeSplatScale.canceled -= instance.OnChangeSplatScale;
         }
 
         public void RemoveCallbacks(IInstallationActions instance)
@@ -421,16 +421,16 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private List<ISimulationActions> m_SimulationActionsCallbackInterfaces = new List<ISimulationActions>();
     private readonly InputAction m_Simulation_Look;
     private readonly InputAction m_Simulation_Move;
-    private readonly InputAction m_Simulation_ChangeModel;
-    private readonly InputAction m_Simulation_ChangeSplatSize;
+    private readonly InputAction m_Simulation_ChangeGSAsset;
+    private readonly InputAction m_Simulation_ChangeSplatScale;
     public struct SimulationActions
     {
         private @PlayerInput m_Wrapper;
         public SimulationActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Look => m_Wrapper.m_Simulation_Look;
         public InputAction @Move => m_Wrapper.m_Simulation_Move;
-        public InputAction @ChangeModel => m_Wrapper.m_Simulation_ChangeModel;
-        public InputAction @ChangeSplatSize => m_Wrapper.m_Simulation_ChangeSplatSize;
+        public InputAction @ChangeGSAsset => m_Wrapper.m_Simulation_ChangeGSAsset;
+        public InputAction @ChangeSplatScale => m_Wrapper.m_Simulation_ChangeSplatScale;
         public InputActionMap Get() { return m_Wrapper.m_Simulation; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -446,12 +446,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @ChangeModel.started += instance.OnChangeModel;
-            @ChangeModel.performed += instance.OnChangeModel;
-            @ChangeModel.canceled += instance.OnChangeModel;
-            @ChangeSplatSize.started += instance.OnChangeSplatSize;
-            @ChangeSplatSize.performed += instance.OnChangeSplatSize;
-            @ChangeSplatSize.canceled += instance.OnChangeSplatSize;
+            @ChangeGSAsset.started += instance.OnChangeGSAsset;
+            @ChangeGSAsset.performed += instance.OnChangeGSAsset;
+            @ChangeGSAsset.canceled += instance.OnChangeGSAsset;
+            @ChangeSplatScale.started += instance.OnChangeSplatScale;
+            @ChangeSplatScale.performed += instance.OnChangeSplatScale;
+            @ChangeSplatScale.canceled += instance.OnChangeSplatScale;
         }
 
         private void UnregisterCallbacks(ISimulationActions instance)
@@ -462,12 +462,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @ChangeModel.started -= instance.OnChangeModel;
-            @ChangeModel.performed -= instance.OnChangeModel;
-            @ChangeModel.canceled -= instance.OnChangeModel;
-            @ChangeSplatSize.started -= instance.OnChangeSplatSize;
-            @ChangeSplatSize.performed -= instance.OnChangeSplatSize;
-            @ChangeSplatSize.canceled -= instance.OnChangeSplatSize;
+            @ChangeGSAsset.started -= instance.OnChangeGSAsset;
+            @ChangeGSAsset.performed -= instance.OnChangeGSAsset;
+            @ChangeGSAsset.canceled -= instance.OnChangeGSAsset;
+            @ChangeSplatScale.started -= instance.OnChangeSplatScale;
+            @ChangeSplatScale.performed -= instance.OnChangeSplatScale;
+            @ChangeSplatScale.canceled -= instance.OnChangeSplatScale;
         }
 
         public void RemoveCallbacks(ISimulationActions instance)
@@ -487,14 +487,14 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     public SimulationActions @Simulation => new SimulationActions(this);
     public interface IInstallationActions
     {
-        void OnChangeModel(InputAction.CallbackContext context);
-        void OnChangeSplatSize(InputAction.CallbackContext context);
+        void OnChangeGSAsset(InputAction.CallbackContext context);
+        void OnChangeSplatScale(InputAction.CallbackContext context);
     }
     public interface ISimulationActions
     {
         void OnLook(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
-        void OnChangeModel(InputAction.CallbackContext context);
-        void OnChangeSplatSize(InputAction.CallbackContext context);
+        void OnChangeGSAsset(InputAction.CallbackContext context);
+        void OnChangeSplatScale(InputAction.CallbackContext context);
     }
 }
