@@ -21,12 +21,12 @@ public class GSMorphOpacity : MonoBehaviour
     }
 
     private void OnEnable() {
-        InputManager.Instance.GSAssetIndex1Event += HandleGSAssetIndex1;
+        InputManager.Instance.GSAssetIndex1Event += HandleGSAssetIndex1Keyboard;
         InputManager.Instance.SplatScaleEvent += HandleSplatScale;
     }
 
     private void OnDisable() {
-        InputManager.Instance.GSAssetIndex1Event -= HandleGSAssetIndex1;
+        InputManager.Instance.GSAssetIndex1Event -= HandleGSAssetIndex1Keyboard;
         InputManager.Instance.SplatScaleEvent -= HandleSplatScale;
     }
 
@@ -65,7 +65,7 @@ public class GSMorphOpacity : MonoBehaviour
         }
     }
 
-    private void HandleGSAssetIndex1(int indexShift){
+    private void HandleGSAssetIndex1Keyboard(int indexShift){
         // check if the new index shift is valid
         if (_index1 + indexShift < 0 || _index1 + indexShift >= _numGSAssets || _isMorphing){
             Debug.Log("Invalid index shift");

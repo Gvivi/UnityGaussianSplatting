@@ -38,7 +38,7 @@
     },
     "com.unity.inputsystem": {
       "version": "1.6.3",
-      "depth": 1,
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"
@@ -80,21 +80,13 @@
       },
       "url": "https://packages.unity.com"
     },
-    "jp.keijiro.minis": {
-      "version": "1.0.10",
+    "jp.keijiro.klak.spout": {
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "jp.keijiro.rtmidi": "1.0.4",
-        "com.unity.inputsystem": "1.0.1"
+        "com.unity.modules.screencapture": "1.0.0"
       },
-      "url": "https://registry.npmjs.com"
-    },
-    "jp.keijiro.rtmidi": {
-      "version": "1.0.4",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://registry.npmjs.com"
     },
     "org.nesnausk.gaussian-splatting": {

@@ -38,12 +38,16 @@ public class GSMorphSplats : MonoBehaviour
     private void OnEnable() {
         InputManager.Instance.GSAssetIndex1Event += HandleGSAssetIndex1;
         InputManager.Instance.GSAssetIndex2Event += HandleGSAssetIndex2;
+        InputManager.Instance.GSAssetIndex1KeyboardEvent += HandleGSAssetIndex1Keyboard;
+        InputManager.Instance.GSAssetIndex2KeyboardEvent += HandleGSAssetIndex2Keyboard;
         InputManager.Instance.SplatScaleEvent += HandleSplatScaleChange;
     }
 
     private void OnDisable() {
         InputManager.Instance.GSAssetIndex1Event -= HandleGSAssetIndex1;
         InputManager.Instance.GSAssetIndex2Event -= HandleGSAssetIndex2;
+        InputManager.Instance.GSAssetIndex1KeyboardEvent -= HandleGSAssetIndex1Keyboard;
+        InputManager.Instance.GSAssetIndex2KeyboardEvent -= HandleGSAssetIndex2Keyboard;
         InputManager.Instance.SplatScaleEvent -= HandleSplatScaleChange;
     }
 
@@ -66,7 +70,36 @@ public class GSMorphSplats : MonoBehaviour
         _GSRenderer.MorphSplats(morphSpeed);
     }
 
-    private void HandleGSAssetIndex1(int indexShift){
+    private int Remap (float value, float from1, float to1, float from2, float to2) {
+        float result = (value - from1) / (to1 - from1) * (to2 - from2) + from2 + 0.5f;
+        return (int)result;
+    }
+
+    private void HandleGSAssetIndex1(int sliderValue){
+        int newIndex = Remap((float)sliderValue, 0f, 1023f, 0f, (float)_numAssetsIndex1-1f);
+        Debug.Log("Slider Value: " + sliderValue + " New Index: " + newIndex);
+
+        _index1 = newIndex;
+
+        _targetAsset = _assetsToMorph[_index1].SubElements[_index2];
+        _GSRenderer.UpdateTargetAsset(_targetAsset);
+    }
+
+    private void HandleGSAssetIndex2(int newIndex){
+        // check if the new index is valid
+        if (newIndex < 0 || newIndex >= _numAssetsIndex2){
+            Debug.Log("Invalid index2");
+            return;
+        }
+
+        Debug.Log("Switch Value: " + newIndex);
+        _index2 = newIndex;
+
+        _targetAsset = _assetsToMorph[_index1].SubElements[_index2];
+        _GSRenderer.UpdateTargetAsset(_targetAsset);
+    }
+
+    private void HandleGSAssetIndex1Keyboard(int indexShift){
         // check if the new index shift is valid
         if (_index1 + indexShift < 0 || _index1 + indexShift >= _numAssetsIndex1){
             Debug.Log("Invalid index1 shift");
@@ -79,7 +112,7 @@ public class GSMorphSplats : MonoBehaviour
         _GSRenderer.UpdateTargetAsset(_targetAsset);
     }
 
-    private void HandleGSAssetIndex2(int indexShift){
+    private void HandleGSAssetIndex2Keyboard(int indexShift){
         // check if the new index shift is valid
         if (_index2 + indexShift < 0 || _index2 + indexShift >= _numAssetsIndex2){
             Debug.Log("Invalid index2 shift");
