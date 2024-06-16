@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Klak.Spout;
 
 public class DisplayManager : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class DisplayManager : MonoBehaviour
 
     void Update()
     {
-        _cameraParent.transform.Rotate(-Vector3.up * Time.deltaTime * 360f/_speed);
+        _cameraParent.transform.Rotate(Vector3.up * Time.deltaTime * 360f/_speed);
     }
 
     void CreateCameras(){
@@ -34,12 +35,14 @@ public class DisplayManager : MonoBehaviour
         _cameras = new GameObject[_nCameras];
         
         float angleInRadians = _cameraAngle * Mathf.Deg2Rad;
+        SpoutSender[] spout = GetComponents<SpoutSender>();
 
         for (int i = 0; i < _nCameras; i++)
         {
             _cameras[i] = new GameObject("Camera" + i);
             _cameras[i].transform.parent = _cameraParent.transform;
             _cameras[i].AddComponent<Camera>();
+            spout[i].sourceCamera = _cameras[i].GetComponent<Camera>();
 
             SetCameraPosition(i, angleInRadians);
             
